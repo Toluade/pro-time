@@ -29,6 +29,23 @@ import Timer from "../Timer";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
 
+declare global {
+  interface Document {
+    mozCancelFullScreen?: () => Promise<void>;
+    msExitFullscreen?: () => Promise<void>;
+    webkitExitFullscreen?: () => Promise<void>;
+    mozFullScreenElement?: Element;
+    msFullscreenElement?: Element;
+    webkitFullscreenElement?: Element;
+  }
+
+  interface HTMLElement {
+    msRequestFullscreen?: () => Promise<void>;
+    mozRequestFullscreen?: () => Promise<void>;
+    webkitRequestFullscreen?: () => Promise<void>;
+  }
+}
+
 const Home: FC = () => {
   const { Provider } = SettingsContext;
 
@@ -99,8 +116,8 @@ const Home: FC = () => {
   function enterFullScreen(element: HTMLElement) {
     if (element.requestFullscreen) {
       element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen(); // Firefox
+    } else if (element.mozRequestFullscreen) {
+      element.mozRequestFullscreen(); // Firefox
     } else if (element.webkitRequestFullscreen) {
       element.webkitRequestFullscreen(); // Safari
     } else if (element.msRequestFullscreen) {
