@@ -322,7 +322,10 @@ const Home: FC = () => {
             {!isFullScreen && (
               <>
                 <SettingsIcon className="icon" onClick={onOpen} />
-                <UpDownIcon className="icon" onClick={fullScreenMode} />
+                <UpDownIcon
+                  className="icon fullscreen"
+                  onClick={fullScreenMode}
+                />
               </>
             )}
             {isFullScreen && (
