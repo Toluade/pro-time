@@ -1,0 +1,31 @@
+html,
+body {
+  margin: 0;
+  font-size: 62.5%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shade1: #111111;
+    --shade2: #dc0000;
+    --shade3: #dc5f00;
+    --shade4: #285430;
+    --shade5: #eeeeee;
+    --shade6: #3f0071;
+    --shade7: #eeeeee;
+    --shade8: #111111;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --shade1: #eeeeee;
+    --shade2: #dc0000;
+    --shade3: #dc5f00;
+    --shade4: #285430;
+    --shade5: #111111;
+    --shade6: #3f0071;
+    --shade7: #eeeeee;
+    --shade8: #111111;
+  }
+}

@@ -1,0 +1,363 @@
+import { createContext, FC, useEffect, useRef, useState } from "react";
+import { CloseIcon, SettingsIcon, UpDownIcon } from "@chakra-ui/icons";
+import "./style.scss";
+import { useDisclosure } from "@chakra-ui/react";
+import CustomDrawer from "../Drawer";
+import Settings from "../Settings";
+import { DisplayModes, SettingsProviderType } from "./types";
+import useCountDownTimer from "../../utils/useCountDownTimer";
+import {
+  MdPlayArrow,
+  MdPause,
+  MdStop,
+  MdQueryBuilder,
+  MdCached,
+  MdOutlineKeyboardArrowDown,
+} from "react-icons/md";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+} from "@chakra-ui/react";
+import TimerForm from "../TimerFrom";
+import Clock from "../Clock";
+import TimeUp from "../TimeUp";
+import Timer from "../Timer";
+
+export const SettingsContext = createContext<SettingsProviderType>({});
+
+const Home: FC = () => {
+  const { Provider } = SettingsContext;
+
+  const inputRef = useRef(null);
+
+  const viewTypes = {
+    CLOCK: "clock",
+    TIMER: "timer",
+    TIMEUP: "time-up",
+  };
+
+  const [view, setView] = useState(viewTypes.CLOCK);
+
+  const [countDownMin, setCountDownMin] = useState<any>("");
+
+  const [dynamicBg, setDynamicBg] = useState<string>("greenBg");
+
+  const {
+    hours,
+    minutes,
+    seconds,
+    resetTimer,
+    startTimer,
+    pauseTimer,
+    stopTimer,
+    isPaused,
+    timerStarted,
+    timeUp,
+    countDown,
+    setCountDown,
+  } = useCountDownTimer(countDownMin, true);
+
+  const play = () => {
+    setShowClock(false);
+    startTimer();
+  };
+
+  const setContDownTime = (value: any) => {
+    setCountDown(value * 60 * 1000);
+    setCountDownMin(value);
+    onCloseP();
+    setShowClock(false);
+  };
+
+  const [showClock, setShowClock] = useState<boolean>(true);
+  const toggleClock = () => {
+    setShowClock(!showClock);
+  };
+
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+
+  const displayModes: DisplayModes = {
+    systemDefault: "1",
+    lightMode: "2",
+    darkMode: "3",
+  };
+  const [displayPreference, setDisplayPreference] = useState<string>(
+    displayModes.darkMode
+  );
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenP,
+    onOpen: onOpenP,
+    onClose: onCloseP,
+  } = useDisclosure();
+
+  function enterFullScreen(element: HTMLElement) {
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen(); // Firefox
+    } else if (element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen(); // Safari
+    } else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen(); // IE/Edge
+    }
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+
+  const fullScreenMode = () => {
+    const container = document.getElementById("container");
+    if (container !== null) {
+      enterFullScreen(container);
+    }
+  };
+
+  const toggleFullScreen = (e: any) => {
+    e.stopPropagation();
+    if (isFullScreen) {
+      exitFullscreen();
+    } else {
+      fullScreenMode();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", (evt) => {
+      if (window.innerHeight == screen.height) {
+        setIsFullScreen(true);
+      } else {
+        setIsFullScreen(false);
+      }
+    });
+
+    return () => {
+      window.removeEventListener("resize", (evt) => {
+        if (window.innerHeight == screen.height) {
+          setIsFullScreen(true);
+        } else {
+          setIsFullScreen(false);
+        }
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    const container = document.getElementById("container");
+
+    if (
+      displayPreference === displayModes.systemDefault &&
+      container !== null
+    ) {
+      container.classList.remove("darkMode");
+      container.classList.remove("lightMode");
+    } else if (
+      displayPreference === displayModes.lightMode &&
+      container !== null
+    ) {
+      container.classList.remove("darkMode");
+      container.classList.add("lightMode");
+    } else if (
+      displayPreference === displayModes.darkMode &&
+      container !== null
+    ) {
+      container.classList.add("darkMode");
+      container.classList.remove("lightMode");
+    }
+  }, [displayPreference]);
+
+  useEffect(() => {
+    if (!showClock) {
+      if (countDown < 10000 || timeUp) {
+        setDynamicBg("timeUp");
+      } else if (countDown < 60000) {
+        setDynamicBg("redBg");
+      } else if (countDown < 120000) {
+        setDynamicBg("orangeBg");
+      } else {
+        setDynamicBg("greenBg");
+      }
+    } else {
+      setDynamicBg("normalBg");
+    }
+
+    // }
+  }, [countDown, timeUp, showClock]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", (evt) => {
+      if (evt.code === "Space") {
+        if (timerStarted) {
+          pauseTimer();
+        } else {
+          play();
+        }
+      }
+    });
+
+    return () => {
+      window.removeEventListener("keydown", (evt) => {
+        if (evt.code === "Space") {
+          if (timerStarted) {
+            pauseTimer();
+          } else {
+            play();
+          }
+        }
+      });
+    };
+  }, [timerStarted]);
+
+  useEffect(() => {
+    if (showClock) {
+      setView(viewTypes.CLOCK);
+    } else if (timeUp) {
+      setView(viewTypes.TIMEUP);
+    } else {
+      setView(viewTypes.TIMER);
+    }
+  }, [showClock, timeUp]);
+
+  return (
+    <Provider value={{ displayModes, displayPreference, setDisplayPreference }}>
+      <div
+        id="container"
+        className={`container ${dynamicBg}`}
+        onDoubleClick={toggleFullScreen}
+      >
+        {isOpen && (
+          <CustomDrawer title="Settings" {...{ isOpen, onClose }}>
+            <Settings />
+          </CustomDrawer>
+        )}
+        <div className="iconContainer">
+          <div className="left">
+            <MdQueryBuilder
+              className={`icon ${
+                dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+              }`}
+              onClick={toggleClock}
+            />
+
+            {!timerStarted || isPaused || timeUp ? (
+              <MdPlayArrow
+                className={`icon ${
+                  dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+                }`}
+                onClick={play}
+              />
+            ) : null}
+            {timerStarted && !isPaused && !timeUp && (
+              <MdPause
+                className={`icon ${
+                  dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+                }`}
+                onClick={pauseTimer}
+              />
+            )}
+
+            <MdStop
+              className={`icon ${
+                dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+              }`}
+              onClick={stopTimer}
+            />
+
+            <MdCached
+              className={`icon ${
+                dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+              }`}
+              onClick={resetTimer}
+            />
+
+            <Popover
+              isOpen={isOpenP}
+              initialFocusRef={inputRef}
+              onOpen={onOpenP}
+              onClose={onCloseP}
+              placement="bottom"
+              closeOnBlur={true}
+              trigger="hover"
+            >
+              <PopoverTrigger>
+                <button
+                  className="popover-trigger-button"
+                  aria-pressed="false"
+                  type="reset"
+                >
+                  <MdOutlineKeyboardArrowDown
+                    className={`icon ${
+                      dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+                    }`}
+                  />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="popover-content">
+                <PopoverArrow />
+                <PopoverCloseButton className="popover-close-button" />
+                <PopoverBody>
+                  <TimerForm ref={inputRef} {...{ setContDownTime }} />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="right">
+            {!isFullScreen && (
+              <>
+                <SettingsIcon
+                  className={`icon ${
+                    dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+                  }`}
+                  onClick={onOpen}
+                />
+                <UpDownIcon
+                  className={`icon fullscreen ${
+                    dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+                  }`}
+                  onClick={fullScreenMode}
+                />
+              </>
+            )}
+            {isFullScreen && (
+              <CloseIcon
+                className={`icon ${
+                  dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
+                }`}
+                onClick={exitFullscreen}
+              />
+            )}
+          </div>
+        </div>
+
+        {view === viewTypes.CLOCK && <Clock />}
+        {view === viewTypes.TIMEUP && <TimeUp />}
+        {view === viewTypes.TIMER && (
+          <Timer
+            {...{
+              hours,
+              minutes,
+              seconds,
+              timerStarted,
+              countDown,
+              setCountDown,
+            }}
+          />
+        )}
+      </div>
+    </Provider>
+  );
+};
+
+export default Home;
