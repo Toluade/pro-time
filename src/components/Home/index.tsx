@@ -22,7 +22,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/react";
-import TimerForm from "../TimerFrom";
+import TimerForm from "../TimerForm";
 import Clock from "../Clock";
 import TimeUp from "../TimeUp";
 import Timer from "../Timer";
@@ -60,8 +60,6 @@ const Home: FC = () => {
   const [view, setView] = useState(viewTypes.CLOCK);
 
   const [countDownMin, setCountDownMin] = useState<any>("");
-
-  const [dynamicBg, setDynamicBg] = useState<string>("greenBg");
 
   const {
     hours,
@@ -196,21 +194,40 @@ const Home: FC = () => {
   }, [displayPreference]);
 
   useEffect(() => {
+    const container = document.getElementById("container");
     if (!showClock) {
-      if (countDown < 10000 || timeUp) {
-        setDynamicBg("timeUp");
-      } else if (countDown < 60000) {
-        setDynamicBg("redBg");
-      } else if (countDown < 120000) {
-        setDynamicBg("orangeBg");
-      } else {
-        setDynamicBg("greenBg");
+      if ((countDown < 10000 || timeUp) && container !== null) {
+        container.classList.add("timeUp");
+        container.classList.remove("redBg");
+        container.classList.remove("greenBg");
+        container.classList.remove("orangeBg");
+        container.classList.remove("normalBg");
+      } else if (countDown < 60000 && container !== null) {
+        container.classList.add("redBg");
+        container.classList.remove("timeUp");
+        container.classList.remove("greenBg");
+        container.classList.remove("orangeBg");
+        container.classList.remove("normalBg");
+      } else if (countDown < 120000 && container !== null) {
+        container.classList.add("orangeBg");
+        container.classList.remove("timeUp");
+        container.classList.remove("greenBg");
+        container.classList.remove("redBg");
+        container.classList.remove("normalBg");
+      } else if (container !== null) {
+        container.classList.add("greenBg");
+        container.classList.remove("timeUp");
+        container.classList.remove("orangeBg");
+        container.classList.remove("redBg");
+        container.classList.remove("normalBg");
       }
-    } else {
-      setDynamicBg("normalBg");
+    } else if (container !== null) {
+      container.classList.add("normalBg");
+      container.classList.remove("timeUp");
+      container.classList.remove("orangeBg");
+      container.classList.remove("redBg");
+      container.classList.remove("greenBg");
     }
-
-    // }
   }, [countDown, timeUp, showClock]);
 
   useEffect(() => {
@@ -251,7 +268,7 @@ const Home: FC = () => {
     <Provider value={{ displayModes, displayPreference, setDisplayPreference }}>
       <div
         id="container"
-        className={`container ${dynamicBg}`}
+        className={`container`}
         onDoubleClick={toggleFullScreen}
       >
         {isOpen && (
@@ -261,43 +278,18 @@ const Home: FC = () => {
         )}
         <div className="iconContainer">
           <div className="left">
-            <MdQueryBuilder
-              className={`icon ${
-                dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-              }`}
-              onClick={toggleClock}
-            />
+            <MdQueryBuilder className="icon" onClick={toggleClock} />
 
             {!timerStarted || isPaused || timeUp ? (
-              <MdPlayArrow
-                className={`icon ${
-                  dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-                }`}
-                onClick={play}
-              />
+              <MdPlayArrow className="icon" onClick={play} />
             ) : null}
             {timerStarted && !isPaused && !timeUp && (
-              <MdPause
-                className={`icon ${
-                  dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-                }`}
-                onClick={pauseTimer}
-              />
+              <MdPause className="icon" onClick={pauseTimer} />
             )}
 
-            <MdStop
-              className={`icon ${
-                dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-              }`}
-              onClick={stopTimer}
-            />
+            <MdStop className="icon" onClick={stopTimer} />
 
-            <MdCached
-              className={`icon ${
-                dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-              }`}
-              onClick={resetTimer}
-            />
+            <MdCached className="icon" onClick={resetTimer} />
 
             <Popover
               isOpen={isOpenP}
@@ -314,11 +306,7 @@ const Home: FC = () => {
                   aria-pressed="false"
                   type="reset"
                 >
-                  <MdOutlineKeyboardArrowDown
-                    className={`icon ${
-                      dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-                    }`}
-                  />
+                  <MdOutlineKeyboardArrowDown className="icon" />
                 </button>
               </PopoverTrigger>
               <PopoverContent className="popover-content">
@@ -333,27 +321,12 @@ const Home: FC = () => {
           <div className="right">
             {!isFullScreen && (
               <>
-                <SettingsIcon
-                  className={`icon ${
-                    dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-                  }`}
-                  onClick={onOpen}
-                />
-                <UpDownIcon
-                  className={`icon fullscreen ${
-                    dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-                  }`}
-                  onClick={fullScreenMode}
-                />
+                <SettingsIcon className="icon" onClick={onOpen} />
+                <UpDownIcon className="icon" onClick={fullScreenMode} />
               </>
             )}
             {isFullScreen && (
-              <CloseIcon
-                className={`icon ${
-                  dynamicBg === "normalBg" ? "iconNormalBg" : "iconAltBg"
-                }`}
-                onClick={exitFullscreen}
-              />
+              <CloseIcon className="icon" onClick={exitFullscreen} />
             )}
           </div>
         </div>

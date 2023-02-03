@@ -2,10 +2,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: var(--shade5);
   color: var(--shade1);
+  background: var(--shade5);
   //   gap: 10px;
-
   padding: 10px;
 
   .form__title {
@@ -39,8 +38,8 @@
   .form__submit {
     font-size: 14px;
 
-    background: var(--shade6);
-    color: var(--shade7);
+    color: var(--shade5);
+    background: var(--shade1);
     padding: 5px 15px;
     border-radius: 4px;
   }

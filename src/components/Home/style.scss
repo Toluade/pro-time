@@ -1,22 +1,22 @@
 .darkMode {
-  --shade1: #111111;
+  --shade1: #222222;
   --shade2: #dc0000;
   --shade3: #dc5f00;
   --shade4: #285430;
   --shade5: #eeeeee;
   --shade6: #3f0071;
   --shade7: #eeeeee;
-  --shade8: #111111;
+  --shade8: #222222;
 }
 .lightMode {
   --shade1: #eeeeee;
   --shade2: #dc0000;
   --shade3: #dc5f00;
   --shade4: #285430;
-  --shade5: #111111;
+  --shade5: #222222;
   --shade6: #3f0071;
   --shade7: #eeeeee;
-  --shade8: #111111;
+  --shade8: #222222;
 }
 
 .normalBg {
@@ -27,15 +27,42 @@
 .greenBg {
   background: var(--shade4);
   color: var(--shade7);
+
+  &.lightMode {
+    color: var(--shade4);
+    background: var(--shade7);
+  }
 }
+// .greenBg > .lightMode {
+//   color: var(--shade4);
+//   background: var(--shade7);
+// }
 .orangeBg {
   background: var(--shade3);
   color: var(--shade7);
+
+  &.lightMode {
+    color: var(--shade3);
+    background: var(--shade7);
+  }
 }
+// .orangeBg .lightMode {
+//   color: var(--shade3);
+//   background: var(--shade7);
+// }
 .redBg {
   background: var(--shade2);
   color: var(--shade7);
+
+  &.lightMode {
+    color: var(--shade2);
+    background: var(--shade7);
+  }
 }
+// .redBg .lightMode {
+//   color: var(--shade2);
+//   background: var(--shade7);
+// }
 
 .timeUp {
   animation: switch 1s infinite;
@@ -103,21 +130,21 @@
       width: 40px;
       height: 40px;
 
-      // background: var(--shade5);
-      // color: var(--shade1);
+      background: var(--shade5);
+      color: var(--shade1);
       padding: 10px;
       border-radius: 50%;
       cursor: pointer;
     }
 
-    .iconNormalBg {
-      background: var(--shade5);
-      color: var(--shade1);
-    }
-    .iconAltBg {
-      background: var(--shade7);
-      color: var(--shade8);
-    }
+    // .iconNormalBg {
+    //   background: var(--shade5);
+    //   color: var(--shade1);
+    // }
+    // .iconAltBg {
+    //   background: var(--shade7);
+    //   color: var(--shade8);
+    // }
 
     .fullscreen {
       transform: rotate(-45deg);
