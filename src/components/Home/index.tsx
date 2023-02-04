@@ -26,6 +26,7 @@ import TimerForm from "../TimerForm";
 import Clock from "../Clock";
 import TimeUp from "../TimeUp";
 import Timer from "../Timer";
+import CustomTooltip from "../CustomTooltip";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
 
@@ -278,18 +279,27 @@ const Home: FC = () => {
         )}
         <div className="iconContainer">
           <div className="left">
-            <MdQueryBuilder className="icon" onClick={toggleClock} />
+            <CustomTooltip label="Toggle clock">
+              <MdQueryBuilder className="icon" onClick={toggleClock} />
+            </CustomTooltip>
 
             {!timerStarted || isPaused || timeUp ? (
-              <MdPlayArrow className="icon" onClick={play} />
+              <CustomTooltip label="Start timer">
+                <MdPlayArrow className="icon" onClick={play} />
+              </CustomTooltip>
             ) : null}
             {timerStarted && !isPaused && !timeUp && (
-              <MdPause className="icon" onClick={pauseTimer} />
+              <CustomTooltip label="Pause timer">
+                <MdPause className="icon" onClick={pauseTimer} />
+              </CustomTooltip>
             )}
+            <CustomTooltip label="Stop timer">
+              <MdStop className="icon" onClick={stopTimer} />
+            </CustomTooltip>
 
-            <MdStop className="icon" onClick={stopTimer} />
-
-            <MdCached className="icon" onClick={resetTimer} />
+            <CustomTooltip label="Restart timer">
+              <MdCached className="icon" onClick={resetTimer} />
+            </CustomTooltip>
 
             <Popover
               isOpen={isOpenP}
@@ -321,15 +331,22 @@ const Home: FC = () => {
           <div className="right">
             {!isFullScreen && (
               <>
-                <SettingsIcon className="icon" onClick={onOpen} />
-                <UpDownIcon
-                  className="icon fullscreen"
-                  onClick={fullScreenMode}
-                />
+                <CustomTooltip label="Settings">
+                  <SettingsIcon className="icon" onClick={onOpen} />
+                </CustomTooltip>
+
+                <CustomTooltip label="Fullscreen">
+                  <UpDownIcon
+                    className="icon fullscreen"
+                    onClick={fullScreenMode}
+                  />
+                </CustomTooltip>
               </>
             )}
             {isFullScreen && (
-              <CloseIcon className="icon" onClick={exitFullscreen} />
+              <CustomTooltip label="Exit fullscreen">
+                <CloseIcon className="icon" onClick={exitFullscreen} />
+              </CustomTooltip>
             )}
           </div>
         </div>
