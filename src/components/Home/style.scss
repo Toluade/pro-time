@@ -129,7 +129,7 @@
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      gap: 20px;
+      // gap: 20px;
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
@@ -137,17 +137,13 @@
         bottom: 20px;
         right: 20px;
         margin: 0 auto;
-
-        // .setTime {
-        //   transform: rotate(180deg);
-        // }
       }
     }
     .right {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: 20px;
+      // gap: 20px;
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
@@ -159,14 +155,21 @@
     }
 
     .icon {
-      width: 40px;
-      height: 40px;
+      font-size: 45px;
+      // width: 40px;
+      // height: 40px;
 
-      background: var(--shade5);
-      color: var(--shade1);
+      color: var(--shade5);
+      // color: var(--shade1);
       padding: 10px;
       border-radius: 50%;
       cursor: pointer;
+
+      &:hover {
+        background: var(--shade5);
+        color: var(--shade1);
+        transition: 0.4s;
+      }
     }
 
     // .iconNormalBg {

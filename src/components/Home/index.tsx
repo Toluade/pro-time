@@ -1,8 +1,8 @@
 import { createContext, FC, useEffect, useRef, useState } from "react";
-import { CloseIcon, SettingsIcon, UpDownIcon } from "@chakra-ui/icons";
+// import { CloseIcon, SettingsIcon, UpDownIcon } from "@chakra-ui/icons";
 import "./style.scss";
 import { useDisclosure } from "@chakra-ui/react";
-import CustomDrawer from "../Drawer";
+// import CustomDrawer from "../Drawer";
 // import Settings from "../Settings";
 import { DisplayModes, SettingsProviderType } from "./types";
 import useCountDownTimer from "../../utils/useCountDownTimer";
@@ -12,23 +12,25 @@ import {
   MdStop,
   MdQueryBuilder,
   MdCached,
-  // MdOutlineKeyboardArrowDown,
   MdDarkMode,
   MdLightMode,
+  MdSettings,
+  MdFullscreen,
+  MdFullscreenExit,
 } from "react-icons/md";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
-  PopoverArrow,
+  // PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import TimerForm from "../TimerForm";
 import Clock from "../Clock";
 import TimeUp from "../TimeUp";
 import Timer from "../Timer";
-import CustomTooltip from "../CustomTooltip";
+// import CustomTooltip from "../CustomTooltip";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
 
@@ -281,34 +283,41 @@ const Home: FC = () => {
         )} */}
         <div className="iconContainer">
           <div className="left">
-            <CustomTooltip label="Toggle clock">
-              <MdQueryBuilder className="icon" onClick={toggleClock} />
-            </CustomTooltip>
+            <MdQueryBuilder
+              title="Toggle clock"
+              className="icon"
+              onClick={toggleClock}
+            />
 
             {!timerStarted || isPaused || timeUp ? (
-              <CustomTooltip label="Start timer">
-                <MdPlayArrow className="icon" onClick={play} />
-              </CustomTooltip>
+              <MdPlayArrow
+                title="Start timer"
+                className="icon"
+                onClick={play}
+              />
             ) : null}
             {timerStarted && !isPaused && !timeUp && (
-              <CustomTooltip label="Pause timer">
-                <MdPause className="icon" onClick={pauseTimer} />
-              </CustomTooltip>
+              <MdPause
+                title="Pause timer"
+                className="icon"
+                onClick={pauseTimer}
+              />
             )}
-            <CustomTooltip label="Stop timer">
-              <MdStop className="icon" onClick={stopTimer} />
-            </CustomTooltip>
 
-            <CustomTooltip label="Restart timer">
-              <MdCached className="icon" onClick={resetTimer} />
-            </CustomTooltip>
+            <MdStop title="Stop timer" className="icon" onClick={stopTimer} />
+
+            <MdCached
+              title="Restart timer"
+              className="icon"
+              onClick={resetTimer}
+            />
 
             <Popover
               isOpen={isOpenP}
               initialFocusRef={inputRef}
               onOpen={onOpenP}
               onClose={onCloseP}
-              placement="bottom"
+              // placement="bottom"
               closeOnBlur={true}
               trigger="hover"
             >
@@ -318,11 +327,11 @@ const Home: FC = () => {
                   aria-pressed="false"
                   type="reset"
                 >
-                  <SettingsIcon className="icon" />
+                  <MdSettings title="Set timer" className="icon" />
                 </button>
               </PopoverTrigger>
               <PopoverContent className="popover-content">
-                <PopoverArrow />
+                {/* <PopoverArrow /> */}
                 <PopoverCloseButton className="popover-close-button" />
                 <PopoverBody>
                   <TimerForm ref={inputRef} {...{ setContDownTime }} />
@@ -333,44 +342,35 @@ const Home: FC = () => {
           <div className="right">
             {!isFullScreen && (
               <>
-                <CustomTooltip
-                  label={
-                    displayPreference === displayModes.darkMode
-                      ? "Light mode"
-                      : "Dark mode"
-                  }
-                >
-                  {/* <SettingsIcon className="icon" onClick={onOpen} /> */}
-                  {displayPreference === displayModes.darkMode ? (
-                    <MdLightMode
-                      className="icon"
-                      onClick={() =>
-                        setDisplayPreference(displayModes.lightMode)
-                      }
-                    />
-                  ) : (
-                    <MdDarkMode
-                      className="icon"
-                      onClick={() =>
-                        setDisplayPreference(displayModes.darkMode)
-                      }
-                    />
-                    // <></>
-                  )}
-                </CustomTooltip>
-
-                <CustomTooltip label="Fullscreen">
-                  <UpDownIcon
-                    className="icon fullscreen"
-                    onClick={fullScreenMode}
+                {displayPreference === displayModes.darkMode ? (
+                  <MdDarkMode
+                    title="Toogle light and dark modes (currently dark mode)"
+                    className="icon"
+                    onClick={() => setDisplayPreference(displayModes.lightMode)}
                   />
-                </CustomTooltip>
+                ) : (
+                  <MdLightMode
+                    title="Toogle light and dark modes (currently light mode)"
+                    className="icon"
+                    onClick={() => setDisplayPreference(displayModes.darkMode)}
+                  />
+
+                  // <></>
+                )}
+
+                <MdFullscreen
+                  title="Enter fullscreen"
+                  className="icon"
+                  onClick={fullScreenMode}
+                />
               </>
             )}
             {isFullScreen && (
-              <CustomTooltip label="Exit fullscreen">
-                <CloseIcon className="icon" onClick={exitFullscreen} />
-              </CustomTooltip>
+              <MdFullscreenExit
+                title="Enter fullscreen"
+                className="icon"
+                onClick={exitFullscreen}
+              />
             )}
           </div>
         </div>
