@@ -103,8 +103,8 @@
   user-select: none; /* Standard syntax */
 
   @media screen and (max-width: 640px) {
-    align-items: flex-start;
-    justify-content: flex-start;
+    // align-items: flex-start;
+    // justify-content: flex-start;
   }
 
   .iconContainer {
@@ -132,7 +132,15 @@
       gap: 20px;
 
       @media screen and (max-width: 640px) {
-        flex-direction: column;
+        // flex-direction: column;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        margin: 0 auto;
+
+        // .setTime {
+        //   transform: rotate(180deg);
+        // }
       }
     }
     .right {
@@ -143,7 +151,10 @@
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
-        justify-content: flex-start;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        justify-content: flex-end;
       }
     }
 

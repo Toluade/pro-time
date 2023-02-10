@@ -3,7 +3,7 @@ import { CloseIcon, SettingsIcon, UpDownIcon } from "@chakra-ui/icons";
 import "./style.scss";
 import { useDisclosure } from "@chakra-ui/react";
 import CustomDrawer from "../Drawer";
-import Settings from "../Settings";
+// import Settings from "../Settings";
 import { DisplayModes, SettingsProviderType } from "./types";
 import useCountDownTimer from "../../utils/useCountDownTimer";
 import {
@@ -12,7 +12,9 @@ import {
   MdStop,
   MdQueryBuilder,
   MdCached,
-  MdOutlineKeyboardArrowDown,
+  // MdOutlineKeyboardArrowDown,
+  MdDarkMode,
+  MdLightMode,
 } from "react-icons/md";
 import {
   Popover,
@@ -105,7 +107,7 @@ const Home: FC = () => {
     displayModes.darkMode
   );
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenP,
     onOpen: onOpenP,
@@ -272,11 +274,11 @@ const Home: FC = () => {
         className={`container`}
         onDoubleClick={toggleFullScreen}
       >
-        {isOpen && (
+        {/* {isOpen && (
           <CustomDrawer title="Settings" {...{ isOpen, onClose }}>
             <Settings />
           </CustomDrawer>
-        )}
+        )} */}
         <div className="iconContainer">
           <div className="left">
             <CustomTooltip label="Toggle clock">
@@ -316,7 +318,7 @@ const Home: FC = () => {
                   aria-pressed="false"
                   type="reset"
                 >
-                  <MdOutlineKeyboardArrowDown className="icon" />
+                  <SettingsIcon className="icon" />
                 </button>
               </PopoverTrigger>
               <PopoverContent className="popover-content">
@@ -331,8 +333,30 @@ const Home: FC = () => {
           <div className="right">
             {!isFullScreen && (
               <>
-                <CustomTooltip label="Settings">
-                  <SettingsIcon className="icon" onClick={onOpen} />
+                <CustomTooltip
+                  label={
+                    displayPreference === displayModes.darkMode
+                      ? "Light mode"
+                      : "Dark mode"
+                  }
+                >
+                  {/* <SettingsIcon className="icon" onClick={onOpen} /> */}
+                  {displayPreference === displayModes.darkMode ? (
+                    <MdLightMode
+                      className="icon"
+                      onClick={() =>
+                        setDisplayPreference(displayModes.lightMode)
+                      }
+                    />
+                  ) : (
+                    <MdDarkMode
+                      className="icon"
+                      onClick={() =>
+                        setDisplayPreference(displayModes.darkMode)
+                      }
+                    />
+                    // <></>
+                  )}
                 </CustomTooltip>
 
                 <CustomTooltip label="Fullscreen">
