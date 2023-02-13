@@ -7,6 +7,7 @@
   --shade6: #3f0071;
   --shade7: #eeeeee;
   --shade8: #222222;
+  --shade9: #eeeeee0f;
 }
 .lightMode {
   --shade1: #eeeeee;
@@ -17,6 +18,7 @@
   --shade6: #3f0071;
   --shade7: #eeeeee;
   --shade8: #222222;
+  --shade9: #2222220f;
 }
 
 .normalBg {
@@ -33,10 +35,6 @@
     background: var(--shade7);
   }
 }
-// .greenBg > .lightMode {
-//   color: var(--shade4);
-//   background: var(--shade7);
-// }
 .orangeBg {
   background: var(--shade3);
   color: var(--shade7);
@@ -46,10 +44,6 @@
     background: var(--shade7);
   }
 }
-// .orangeBg .lightMode {
-//   color: var(--shade3);
-//   background: var(--shade7);
-// }
 .redBg {
   background: var(--shade2);
   color: var(--shade7);
@@ -59,10 +53,6 @@
     background: var(--shade7);
   }
 }
-// .redBg .lightMode {
-//   color: var(--shade2);
-//   background: var(--shade7);
-// }
 
 .timeUp {
   animation: switch 1s infinite;
@@ -129,7 +119,7 @@
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      // gap: 20px;
+      gap: 10px;
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
@@ -143,7 +133,7 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      // gap: 20px;
+      gap: 10px;
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
@@ -156,30 +146,18 @@
 
     .icon {
       font-size: 45px;
-      // width: 40px;
-      // height: 40px;
-
       color: var(--shade5);
-      // color: var(--shade1);
+      background: var(--shade9);
       padding: 10px;
       border-radius: 50%;
       cursor: pointer;
+      transition: 0.4s;
 
       &:hover {
         background: var(--shade5);
         color: var(--shade1);
-        transition: 0.4s;
       }
     }
-
-    // .iconNormalBg {
-    //   background: var(--shade5);
-    //   color: var(--shade1);
-    // }
-    // .iconAltBg {
-    //   background: var(--shade7);
-    //   color: var(--shade8);
-    // }
 
     .fullscreen {
       transform: rotate(-45deg);
