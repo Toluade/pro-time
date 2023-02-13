@@ -33,6 +33,7 @@ import Clock from "../Clock";
 import TimeUp from "../TimeUp";
 import Timer from "../Timer";
 import alarm from "../../assets/audio/alarm.mp3";
+import alarm2 from "../../assets/audio/alarm.ogg";
 // import CustomTooltip from "../CustomTooltip";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
@@ -285,7 +286,8 @@ const Home: FC = () => {
       >
         {timeUp && (
           <audio autoPlay muted={muted} loop>
-            <source src={alarm} type="audio/ogg" />
+            <source src={alarm} type="audio/mpeg" />
+            <source src={alarm2} type="audio/ogg" />
           </audio>
         )}
         {/* {isOpen && (
