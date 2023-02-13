@@ -17,6 +17,8 @@ import {
   MdSettings,
   MdFullscreen,
   MdFullscreenExit,
+  MdVolumeOff,
+  MdVolumeUp,
 } from "react-icons/md";
 import {
   Popover,
@@ -30,6 +32,7 @@ import TimerForm from "../TimerForm";
 import Clock from "../Clock";
 import TimeUp from "../TimeUp";
 import Timer from "../Timer";
+import alarm from "../../assets/audio/alarm.mp3";
 // import CustomTooltip from "../CustomTooltip";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
@@ -63,6 +66,10 @@ const Home: FC = () => {
   };
 
   const [view, setView] = useState(viewTypes.CLOCK);
+
+  const [muted, setMuted] = useState<boolean>(true);
+
+  const toggleMute = () => setMuted(!muted);
 
   const [countDownMin, setCountDownMin] = useState<any>("");
 
@@ -276,6 +283,11 @@ const Home: FC = () => {
         className={`container`}
         onDoubleClick={toggleFullScreen}
       >
+        {timeUp && (
+          <audio autoPlay muted={muted} loop>
+            <source src={alarm} type="audio/ogg" />
+          </audio>
+        )}
         {/* {isOpen && (
           <CustomDrawer title="Settings" {...{ isOpen, onClose }}>
             <Settings />
@@ -340,36 +352,45 @@ const Home: FC = () => {
             </Popover>
           </div>
           <div className="right">
-            {!isFullScreen && (
-              <>
-                {displayPreference === displayModes.darkMode ? (
-                  <MdDarkMode
-                    title="Toogle light and dark modes (currently dark mode)"
-                    className="icon"
-                    onClick={() => setDisplayPreference(displayModes.lightMode)}
-                  />
-                ) : (
-                  <MdLightMode
-                    title="Toogle light and dark modes (currently light mode)"
-                    className="icon"
-                    onClick={() => setDisplayPreference(displayModes.darkMode)}
-                  />
-
-                  // <></>
-                )}
-
-                <MdFullscreen
-                  title="Enter fullscreen"
-                  className="icon"
-                  onClick={fullScreenMode}
-                />
-              </>
+            {muted ? (
+              <MdVolumeOff
+                title="Toggle audio on and off (currently off)"
+                className="icon"
+                onClick={toggleMute}
+              />
+            ) : (
+              <MdVolumeUp
+                title="Toggle audio on and off (currently on)"
+                className="icon"
+                onClick={toggleMute}
+              />
             )}
-            {isFullScreen && (
+            {displayPreference === displayModes.darkMode ? (
+              <MdDarkMode
+                title="Toggle light and dark modes (currently dark mode)"
+                className="icon"
+                onClick={() => setDisplayPreference(displayModes.lightMode)}
+              />
+            ) : (
+              <MdLightMode
+                title="Toogle light and dark modes (currently light mode)"
+                className="icon"
+                onClick={() => setDisplayPreference(displayModes.darkMode)}
+              />
+
+              // <></>
+            )}
+            {isFullScreen ? (
               <MdFullscreenExit
                 title="Enter fullscreen"
                 className="icon"
                 onClick={exitFullscreen}
+              />
+            ) : (
+              <MdFullscreen
+                title="Enter fullscreen"
+                className="icon"
+                onClick={fullScreenMode}
               />
             )}
           </div>
