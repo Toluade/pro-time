@@ -22,8 +22,12 @@ const useCountDownTimer = (inputValue: number, isFormated: boolean) => {
   };
   const resumeTimer = () => setIsPaused(false);
   const stopTimer = () => {
-    setCountDown((count) => count - count);
-    setTimerStarted(false);
+    if (!timerStarted) {
+      setCountDown(inputValue * 60 * 1000);
+    } else {
+      setCountDown((count) => count - count);
+      setTimerStarted(false);
+    }
   };
 
   const resetTimer = () => setCountDown(inputValue * 60 * 1000);
@@ -31,6 +35,7 @@ const useCountDownTimer = (inputValue: number, isFormated: boolean) => {
   useEffect(() => {
     if (countDown === 0) {
       setTImeUp(true);
+      setTimerStarted(false);
     } else {
       setTImeUp(false);
     }

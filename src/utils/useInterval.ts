@@ -1,25 +1,25 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
+import worker_script from "./worker-script";
+
+const timerWorker = new Worker(worker_script);
 
 const useInterval = (
   timerStarted: boolean,
-  countDown: number,
   setCountDown: Dispatch<SetStateAction<number>>
 ) => {
   useEffect(() => {
-    if (!timerStarted) return;
-    // console.log("It started");
-    let countDownId = setInterval(() => {
-      setCountDown((count) => (count > 0 ? count - 1000 : count));
-
-      if (countDown === 1) {
-        clearInterval(countDownId);
-      }
-    }, 1000);
-
-    return function cleanup() {
-      clearInterval(countDownId);
+    timerWorker.onmessage = ({ data: { time } }) => {
+      setCountDown((count) => (count > 0 ? count - time : count));
     };
-  }, [timerStarted, countDown]);
+  }, []);
+
+  useEffect(() => {
+    if (timerStarted) {
+      timerWorker.postMessage({ turn: "on" });
+    } else {
+      timerWorker.postMessage({ turn: "off" });
+    }
+  }, [timerStarted]);
 };
 
 export default useInterval;

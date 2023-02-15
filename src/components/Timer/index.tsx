@@ -18,7 +18,8 @@ const Timer = ({
   countDown,
   setCountDown,
 }: Props) => {
-  useInterval(timerStarted, countDown, setCountDown);
+  useInterval(timerStarted, setCountDown);
+
   return (
     <div className="timer">
       <p id="hour" className="timer__item">
