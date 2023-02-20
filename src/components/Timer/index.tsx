@@ -6,7 +6,7 @@ type Props = {
   minutes: any;
   seconds: any;
   timerStarted: boolean;
-  countDown: number;
+  countDown?: number;
   setCountDown: Dispatch<SetStateAction<number>>;
 };
 
@@ -15,7 +15,6 @@ const Timer = ({
   minutes,
   seconds,
   timerStarted,
-  countDown,
   setCountDown,
 }: Props) => {
   useInterval(timerStarted, setCountDown);
