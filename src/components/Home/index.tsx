@@ -1,9 +1,6 @@
 import { createContext, FC, useEffect, useRef, useState } from "react";
-// import { CloseIcon, SettingsIcon, UpDownIcon } from "@chakra-ui/icons";
 import "./style.scss";
 import { useDisclosure } from "@chakra-ui/react";
-// import CustomDrawer from "../Drawer";
-// import Settings from "../Settings";
 import { DisplayModes, SettingsProviderType } from "./types";
 import useCountDownTimer from "../../utils/useCountDownTimer";
 import {
@@ -25,7 +22,6 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
-  // PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import TimerForm from "../TimerForm";
@@ -34,7 +30,7 @@ import TimeUp from "../TimeUp";
 import Timer from "../Timer";
 import alarm from "../../assets/audio/alarm.mp3";
 import alarm2 from "../../assets/audio/alarm.ogg";
-// import CustomTooltip from "../CustomTooltip";
+import { minuteToMillisecond } from "../../utils/util";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
 
@@ -55,6 +51,14 @@ declare global {
   }
 }
 
+const colorThemes = {
+  DEFAULT: "default-theme",
+  GREEN: "green-theme",
+  ORANGE: "orange-theme",
+  RED: "red-theme",
+  BLINK: "blink",
+};
+
 const Home: FC = () => {
   const { Provider } = SettingsContext;
 
@@ -67,6 +71,12 @@ const Home: FC = () => {
   };
 
   const [view, setView] = useState(viewTypes.CLOCK);
+
+  const [notificationPermission, setNotificationPermission] = useState("");
+
+  const [classList, setClassList] = useState<string>(colorThemes.DEFAULT);
+  const [displayPreferenceClass, setDisplayPreferenceClass] =
+    useState<string>("dark-theme");
 
   const [muted, setMuted] = useState<boolean>(true);
 
@@ -92,10 +102,28 @@ const Home: FC = () => {
   const play = () => {
     setShowClock(false);
     startTimer();
+
+    if (notificationPermission === "granted") {
+      new Notification("Timer Started", {
+        body: `${hours} : ${minutes} : ${seconds}`,
+        icon: "ProTime.png",
+      });
+    }
+  };
+
+  const pause = () => {
+    pauseTimer();
+
+    if (notificationPermission === "granted") {
+      new Notification("Timer Paused", {
+        body: `${hours} : ${minutes} : ${seconds}`,
+        icon: "ProTime.png",
+      });
+    }
   };
 
   const setContDownTime = (value: any) => {
-    setCountDown(value * 60 * 1000);
+    setCountDown(minuteToMillisecond(value));
     setCountDownMin(value);
     onCloseP();
     setShowClock(false);
@@ -117,7 +145,6 @@ const Home: FC = () => {
     displayModes.darkMode
   );
 
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenP,
     onOpen: onOpenP,
@@ -185,61 +212,28 @@ const Home: FC = () => {
   useEffect(() => {
     const container = document.getElementById("container");
 
-    if (
-      displayPreference === displayModes.systemDefault &&
-      container !== null
-    ) {
-      container.classList.remove("darkMode");
-      container.classList.remove("lightMode");
-    } else if (
-      displayPreference === displayModes.lightMode &&
-      container !== null
-    ) {
-      container.classList.remove("darkMode");
-      container.classList.add("lightMode");
-    } else if (
-      displayPreference === displayModes.darkMode &&
-      container !== null
-    ) {
-      container.classList.add("darkMode");
-      container.classList.remove("lightMode");
+    if (displayPreference === displayModes.systemDefault) {
+      setDisplayPreferenceClass("");
+    } else if (displayPreference === displayModes.lightMode) {
+      setDisplayPreferenceClass("light-theme");
+    } else if (displayPreference === displayModes.darkMode) {
+      setDisplayPreferenceClass("dark-theme");
     }
   }, [displayPreference]);
 
   useEffect(() => {
-    const container = document.getElementById("container");
     if (!showClock) {
-      if ((countDown < 10000 || timeUp) && container !== null) {
-        container.classList.add("timeUp");
-        container.classList.remove("redBg");
-        container.classList.remove("greenBg");
-        container.classList.remove("orangeBg");
-        container.classList.remove("normalBg");
-      } else if (countDown < 60000 && container !== null) {
-        container.classList.add("redBg");
-        container.classList.remove("timeUp");
-        container.classList.remove("greenBg");
-        container.classList.remove("orangeBg");
-        container.classList.remove("normalBg");
-      } else if (countDown < 120000 && container !== null) {
-        container.classList.add("orangeBg");
-        container.classList.remove("timeUp");
-        container.classList.remove("greenBg");
-        container.classList.remove("redBg");
-        container.classList.remove("normalBg");
-      } else if (container !== null) {
-        container.classList.add("greenBg");
-        container.classList.remove("timeUp");
-        container.classList.remove("orangeBg");
-        container.classList.remove("redBg");
-        container.classList.remove("normalBg");
+      if (timeUp) {
+        setClassList(`${colorThemes.RED} ${colorThemes.BLINK}`);
+      } else if (countDown < 10000) {
+        setClassList(`${colorThemes.ORANGE} ${colorThemes.BLINK}`);
+      } else if (countDown < 60000) {
+        setClassList(colorThemes.ORANGE);
+      } else {
+        setClassList(colorThemes.GREEN);
       }
-    } else if (container !== null) {
-      container.classList.add("normalBg");
-      container.classList.remove("timeUp");
-      container.classList.remove("orangeBg");
-      container.classList.remove("redBg");
-      container.classList.remove("greenBg");
+    } else {
+      setClassList(colorThemes.DEFAULT);
     }
   }, [countDown, timeUp, showClock]);
 
@@ -277,11 +271,26 @@ const Home: FC = () => {
     }
   }, [showClock, timeUp]);
 
+  useEffect(() => {
+    Notification.requestPermission().then((perm) =>
+      setNotificationPermission(perm)
+    );
+  }, []);
+
+  useEffect(() => {
+    if (timeUp && notificationPermission === "granted") {
+      new Notification("Time up", {
+        body: `${hours} : ${minutes} : ${seconds}`,
+        icon: "ProTime.png",
+      });
+    }
+  }, [timeUp, notificationPermission]);
+
   return (
     <Provider value={{ displayModes, displayPreference, setDisplayPreference }}>
       <div
         id="container"
-        className={`container`}
+        className={`container ${classList} ${displayPreferenceClass}`}
         onDoubleClick={toggleFullScreen}
       >
         {timeUp && (
@@ -290,11 +299,7 @@ const Home: FC = () => {
             <source src={alarm2} type="audio/ogg" />
           </audio>
         )}
-        {/* {isOpen && (
-          <CustomDrawer title="Settings" {...{ isOpen, onClose }}>
-            <Settings />
-          </CustomDrawer>
-        )} */}
+
         <div className="iconContainer">
           <div className="left">
             <MdQueryBuilder
@@ -311,11 +316,7 @@ const Home: FC = () => {
               />
             ) : null}
             {timerStarted && !isPaused && !timeUp && (
-              <MdPause
-                title="Pause timer"
-                className="icon"
-                onClick={pauseTimer}
-              />
+              <MdPause title="Pause timer" className="icon" onClick={pause} />
             )}
 
             <MdStop title="Stop timer" className="icon" onClick={stopTimer} />
@@ -345,7 +346,6 @@ const Home: FC = () => {
                 </button>
               </PopoverTrigger>
               <PopoverContent className="popover-content">
-                {/* <PopoverArrow /> */}
                 <PopoverCloseButton className="popover-close-button" />
                 <PopoverBody>
                   <TimerForm ref={inputRef} {...{ setContDownTime }} />
@@ -379,8 +379,6 @@ const Home: FC = () => {
                 className="icon"
                 onClick={() => setDisplayPreference(displayModes.darkMode)}
               />
-
-              // <></>
             )}
             {isFullScreen ? (
               <MdFullscreenExit

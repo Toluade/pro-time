@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { minuteToMillisecond } from "./util";
 
 /**
  * This is a hook that returns a countdown timer
@@ -23,14 +24,14 @@ const useCountDownTimer = (inputValue: number, isFormated: boolean) => {
   const resumeTimer = () => setIsPaused(false);
   const stopTimer = () => {
     if (!timerStarted) {
-      setCountDown(inputValue * 60 * 1000);
+      setCountDown(minuteToMillisecond(inputValue));
     } else {
       setCountDown((count) => count - count);
       setTimerStarted(false);
     }
   };
 
-  const resetTimer = () => setCountDown(inputValue * 60 * 1000);
+  const resetTimer = () => setCountDown(minuteToMillisecond(inputValue));
 
   useEffect(() => {
     if (countDown === 0) {
