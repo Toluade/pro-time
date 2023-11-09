@@ -1,13 +1,13 @@
 .dark-theme {
-  --shade1: #222222;
+  --shade1: #000000;
   --shade2: #dc0000;
-  --shade3: #dc5f00;
+  --shade3: #c05300;
   --shade4: #285430;
   --shade5: #eeeeee;
   --shade6: #3f0071;
   --shade7: #eeeeee;
-  --shade8: #222222;
-  --shade9: #eeeeee0f;
+  --shade8: #000000;
+  --shade9: #eeeeee14;
 
   --background-shade: var(--shade1);
   --accent-color: var(--shade5);
@@ -15,13 +15,13 @@
 .light-theme {
   --shade1: #eeeeee;
   --shade2: #dc0000;
-  --shade3: #dc5f00;
+  --shade3: #c05300;
   --shade4: #285430;
-  --shade5: #222222;
+  --shade5: #000000;
   --shade6: #3f0071;
   --shade7: #eeeeee;
-  --shade8: #222222;
-  --shade9: #2222220f;
+  --shade8: #000000;
+  --shade9: #00000014;
 
   --background-shade: var(--shade1);
   --accent-color: var(--shade5);
@@ -115,6 +115,7 @@
 
   .iconContainer {
     position: fixed;
+    z-index: 2;
     top: 0px;
     width: 100%;
     // height: 70px;
@@ -205,7 +206,17 @@
     gap: 5px;
 
     .timer__item {
-      display: flex;
+      // display: flex;
+      display: inline-flex;
+      transform: scale(1.1, 1.35);
+      /* Safari and Chrome */
+      -webkit-transform: scale(1.1, 1.35);
+      /* Firefox */
+      -moz-transform: scale(1.1, 1.35);
+      /* IE 9+ */
+      -ms-transform: scale(1.1, 1.35);
+      /* Opera */
+      -o-transform: scale(1.1, 1.35);
       justify-content: center;
       align-items: center;
       padding: 5px;
@@ -233,6 +244,17 @@
 
     font-variant-numeric: tabular-nums;
     font-weight: 700;
+
+    display: inline-block;
+    transform: scale(1, 1.35);
+    /* Safari and Chrome */
+    -webkit-transform: scale(1, 1.35);
+    /* Firefox */
+    -moz-transform: scale(1, 1.35);
+    /* IE 9+ */
+    -ms-transform: scale(1, 1.35);
+    /* Opera */
+    -o-transform: scale(1, 1.35);
 
     @media screen and (max-width: 1000px) {
       letter-spacing: 0.5vw;
