@@ -24,14 +24,14 @@ const useCountDownTimer = (inputValue: number, isFormated: boolean) => {
   const resumeTimer = () => setIsPaused(false);
   const stopTimer = () => {
     if (!timerStarted) {
-      setCountDown(minuteToMillisecond(inputValue));
+      setCountDown(inputValue);
     } else {
       setCountDown((count) => count - count);
       setTimerStarted(false);
     }
   };
 
-  const resetTimer = () => setCountDown(minuteToMillisecond(inputValue));
+  const resetTimer = () => setCountDown(inputValue);
 
   useEffect(() => {
     if (countDown === 0) {
