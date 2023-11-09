@@ -103,6 +103,10 @@ const Home: FC = () => {
     setShowClock(false);
     startTimer();
 
+    Notification.requestPermission().then((perm) =>
+      setNotificationPermission(perm)
+    );
+
     if (notificationPermission === "granted") {
       new Notification("Timer Started", {
         body: `${hours} : ${minutes} : ${seconds}`,
@@ -122,8 +126,8 @@ const Home: FC = () => {
     }
   };
 
-  const setContDownTime = (value: any) => {
-    setCountDown(minuteToMillisecond(value));
+  const setContDownTime = (value: number) => {
+    setCountDown(value);
     setCountDownMin(value);
     onCloseP();
     setShowClock(false);
@@ -222,6 +226,41 @@ const Home: FC = () => {
   }, [displayPreference]);
 
   useEffect(() => {
+    if (window && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setDisplayPreferenceClass("dark-theme");
+    } else {
+      setDisplayPreferenceClass("light-theme");
+    }
+
+    if (window) {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (event) => {
+          if (event.matches) {
+            //dark mode
+            setDisplayPreferenceClass("dark-theme");
+          } else {
+            //light mode
+            setDisplayPreferenceClass("light-theme");
+          }
+        });
+    }
+
+    return () =>
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", (event) => {
+          if (event.matches) {
+            //dark mode
+            setDisplayPreferenceClass("dark-theme");
+          } else {
+            //light mode
+            setDisplayPreferenceClass("light-theme");
+          }
+        });
+  }, []);
+
+  useEffect(() => {
     if (!showClock) {
       if (timeUp) {
         setClassList(`${colorThemes.RED} ${colorThemes.BLINK}`);
@@ -270,12 +309,6 @@ const Home: FC = () => {
       setView(viewTypes.TIMER);
     }
   }, [showClock, timeUp]);
-
-  useEffect(() => {
-    Notification.requestPermission().then((perm) =>
-      setNotificationPermission(perm)
-    );
-  }, []);
 
   useEffect(() => {
     if (timeUp && notificationPermission === "granted") {
@@ -367,17 +400,17 @@ const Home: FC = () => {
                 onClick={toggleMute}
               />
             )}
-            {displayPreference === displayModes.darkMode ? (
-              <MdDarkMode
-                title="Toggle light and dark modes (currently dark mode)"
+            {displayPreferenceClass === "dark-theme" ? (
+              <MdLightMode
+                title="Toogle light and dark modes (currently dark mode)"
                 className="icon"
-                onClick={() => setDisplayPreference(displayModes.lightMode)}
+                onClick={() => setDisplayPreferenceClass("light-theme")}
               />
             ) : (
-              <MdLightMode
-                title="Toogle light and dark modes (currently light mode)"
+              <MdDarkMode
+                title="Toggle light and dark modes (currently light mode)"
                 className="icon"
-                onClick={() => setDisplayPreference(displayModes.darkMode)}
+                onClick={() => setDisplayPreferenceClass("dark-theme")}
               />
             )}
             {isFullScreen ? (
