@@ -34,6 +34,16 @@
         outline: 1px solid var(--shade8);
       }
     }
+
+    .form__label {
+      padding: 5px;
+      border-radius: 4px;
+      outline: none;
+
+      &:focus {
+        outline: 1px solid var(--shade8);
+      }
+    }
   }
   .form__submit {
     font-size: 14px;

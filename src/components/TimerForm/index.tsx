@@ -1,12 +1,20 @@
 import { FormEvent, forwardRef, memo, useState } from "react";
 import "./style.scss";
+import { minuteToMillisecond, secondsToMilliseconds } from "../../utils/util";
 
 type Props = {
-  setContDownTime: (e: FormEvent<HTMLInputElement>) => void;
+  setContDownTime: (value: number) => void;
 };
 
 const TimerForm = forwardRef<any, Props>(({ setContDownTime }, ref) => {
   const [inputValue, setInputValue] = useState<any>("");
+
+  const units = ["Seconds", "Minutes"];
+  const [unit, setUnit] = useState(units[0]);
+
+  const handleUnitChange = (e: FormEvent<HTMLSelectElement>) => {
+    setUnit(e.currentTarget.value);
+  };
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     setInputValue(e.currentTarget.value);
@@ -14,7 +22,11 @@ const TimerForm = forwardRef<any, Props>(({ setContDownTime }, ref) => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setContDownTime(inputValue);
+    if (unit === "Seconds") {
+      setContDownTime(secondsToMilliseconds(parseInt(inputValue)));
+    } else if (unit === "Minutes") {
+      setContDownTime(minuteToMillisecond(parseInt(inputValue)));
+    }
   };
   return (
     <>
@@ -36,9 +48,17 @@ const TimerForm = forwardRef<any, Props>(({ setContDownTime }, ref) => {
               value={inputValue}
               onChange={handleChange}
             />
-            <label className="form__label" htmlFor="minutes">
-              Minutes
-            </label>
+            <select
+              value={unit}
+              onChange={handleUnitChange}
+              className="form__label"
+            >
+              {units?.map((unit, index) => (
+                <option key={index} value={unit}>
+                  {unit}
+                </option>
+              ))}
+            </select>
           </div>
           <button className="form__submit" type="submit" onClick={onSubmit}>
             Set
