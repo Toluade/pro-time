@@ -1,0 +1,22 @@
+{
+  "name": "ProTime",
+  "short_name": "ProTime",
+  "dir": "ltr",
+  "lang": "en-US",
+  "orientation": "any",
+  "start_url": "/",
+  "background_color": "#000000",
+  "theme_color": "#eeeeee",
+  "display": "standalone",
+  "description": "A timer for your sessioned programmes.",
+  "icons": [
+    {
+      "src": "/ProTime_192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/ProTime_512.png",
+      "sizes": "512x512"
+    }
+  ]
+}
