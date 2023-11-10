@@ -79,6 +79,9 @@ const Home: FC = () => {
     useState<string>("dark-theme");
 
   const [muted, setMuted] = useState<boolean>(true);
+  const [oneBg, setOneBg] = useState(false);
+
+  const toggleOneBg = () => setOneBg((prev) => !prev);
 
   const toggleMute = () => setMuted(!muted);
 
@@ -261,6 +264,10 @@ const Home: FC = () => {
   }, []);
 
   useEffect(() => {
+    if (oneBg) {
+      setClassList(colorThemes.DEFAULT);
+      return;
+    }
     if (!showClock) {
       if (timeUp) {
         setClassList(`${colorThemes.RED} ${colorThemes.BLINK}`);
@@ -274,7 +281,7 @@ const Home: FC = () => {
     } else {
       setClassList(colorThemes.DEFAULT);
     }
-  }, [countDown, timeUp, showClock]);
+  }, [countDown, timeUp, showClock, oneBg]);
 
   useEffect(() => {
     window.addEventListener("keydown", (evt) => {
@@ -381,7 +388,10 @@ const Home: FC = () => {
               <PopoverContent className="popover-content">
                 <PopoverCloseButton className="popover-close-button" />
                 <PopoverBody>
-                  <TimerForm ref={inputRef} {...{ setContDownTime }} />
+                  <TimerForm
+                    ref={inputRef}
+                    {...{ setContDownTime, toggleOneBg, oneBg }}
+                  />
                 </PopoverBody>
               </PopoverContent>
             </Popover>

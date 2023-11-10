@@ -274,3 +274,30 @@
     font-weight: 700;
   }
 }
+
+.badge {
+  --colorOne: #eeeeee;
+  --colorTwo: #000000;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: var(--shade1);
+  color: #eeeeee;
+  font-size: 10px;
+  font-weight: 700;
+
+  animation: blink 2s infinite;
+  @keyframes blink {
+    0% {
+      background: var(--colorOne);
+      color: var(--colorTwo);
+    }
+    50% {
+      background: var(--color-Two);
+      color: var(--colorOne);
+    }
+    100% {
+      background: var(--colorOne);
+      color: var(--colorTwo);
+    }
+  }
+}
