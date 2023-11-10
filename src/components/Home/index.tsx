@@ -30,7 +30,7 @@ import TimeUp from "../TimeUp";
 import Timer from "../Timer";
 import alarm from "../../assets/audio/alarm.mp3";
 import alarm2 from "../../assets/audio/alarm.ogg";
-import { minuteToMillisecond } from "../../utils/util";
+import { feature } from "../../utils/storedItems";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
 
@@ -79,9 +79,19 @@ const Home: FC = () => {
     useState<string>("dark-theme");
 
   const [muted, setMuted] = useState<boolean>(true);
-  const [oneBg, setOneBg] = useState(false);
+  const [oneBg, setOneBg] = useState(
+    localStorage.getItem(feature.ONE_BG.enable) === "true" ? true : false
+  );
 
-  const toggleOneBg = () => setOneBg((prev) => !prev);
+  const [mouseOver, setMouseOver] = useState(false);
+
+  const toggleOneBg = () => {
+    setOneBg((prev) => !prev);
+
+    if (!Boolean(localStorage.getItem(feature.ONE_BG.name))) {
+      localStorage.setItem(feature.ONE_BG.name, "true");
+    }
+  };
 
   const toggleMute = () => setMuted(!muted);
 
@@ -266,7 +276,10 @@ const Home: FC = () => {
   useEffect(() => {
     if (oneBg) {
       setClassList(colorThemes.DEFAULT);
+      localStorage.setItem(feature.ONE_BG.enable, "true");
       return;
+    } else {
+      localStorage.setItem(feature.ONE_BG.enable, "false");
     }
     if (!showClock) {
       if (timeUp) {
@@ -326,6 +339,32 @@ const Home: FC = () => {
     }
   }, [timeUp, notificationPermission]);
 
+  useEffect(() => {
+    const date = new Date();
+
+    if (
+      date &&
+      date.getMonth() !== feature.ONE_BG.expiryMonth &&
+      date.getFullYear() !== feature.ONE_BG.expiryYear &&
+      localStorage.getItem(feature.ONE_BG.name) === "true"
+    ) {
+      localStorage.setItem(feature.ONE_BG.name, "true");
+    }
+  }, []);
+
+  useEffect(() => {
+    const iconContainer = document.getElementById("iconContainer");
+    if (iconContainer && isFullScreen && !mouseOver) {
+      setTimeout(() => {
+        iconContainer.style.transition = "1s";
+        iconContainer.style.opacity = "0";
+      }, 3800);
+    } else if (iconContainer) {
+      iconContainer.style.transition = "0.3s";
+      iconContainer.style.opacity = "1";
+    }
+  }, [isFullScreen, mouseOver]);
+
   return (
     <Provider value={{ displayModes, displayPreference, setDisplayPreference }}>
       <div
@@ -340,7 +379,12 @@ const Home: FC = () => {
           </audio>
         )}
 
-        <div className="iconContainer">
+        <div
+          onMouseOver={() => setMouseOver(true)}
+          onMouseOut={() => setMouseOver(false)}
+          id="iconContainer"
+          className="iconContainer"
+        >
           <div className="left">
             <MdQueryBuilder
               title="Toggle clock"
@@ -374,7 +418,7 @@ const Home: FC = () => {
               onClose={onCloseP}
               // placement="bottom"
               closeOnBlur={true}
-              trigger="hover"
+              // trigger="hover"
             >
               <PopoverTrigger>
                 <button

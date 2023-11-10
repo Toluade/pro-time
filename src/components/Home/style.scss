@@ -116,7 +116,7 @@
   .iconContainer {
     position: fixed;
     z-index: 2;
-    top: 0px;
+    bottom: 0px;
     width: 100%;
     // height: 70px;
     padding: 40px;
@@ -299,5 +299,27 @@
       background: var(--colorOne);
       color: var(--colorTwo);
     }
+  }
+}
+
+@keyframes fadeDown {
+  0% {
+    opacity: 1;
+    transfrom: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(200px);
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transfrom: translateY(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

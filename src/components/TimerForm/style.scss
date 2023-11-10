@@ -35,6 +35,16 @@
       }
     }
 
+    .form__select {
+      padding: 5px;
+      border-radius: 4px;
+      outline: none;
+      background-color: #ffffff;
+
+      &:focus {
+        outline: 1px solid var(--shade8);
+      }
+    }
     .form__label {
       padding: 5px;
       border-radius: 4px;
