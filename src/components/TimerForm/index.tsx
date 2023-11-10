@@ -1,7 +1,8 @@
-import { FormEvent, forwardRef, memo, useState } from "react";
+import { FormEvent, forwardRef, memo, useEffect, useState } from "react";
 import "./style.scss";
 import { minuteToMillisecond, secondsToMilliseconds } from "../../utils/util";
 import { Switch } from "@chakra-ui/react";
+import { feature } from "../../utils/storedItems";
 
 type Props = {
   setContDownTime: (value: number) => void;
@@ -32,9 +33,24 @@ const TimerForm = forwardRef<any, Props>(
         setContDownTime(minuteToMillisecond(parseInt(inputValue)));
       }
     };
+
+    useEffect(() => {
+      const form = document.getElementById("form");
+
+      form?.addEventListener("dblclick", (event) => {
+        event.stopPropagation();
+      });
+
+      return () =>
+        form?.removeEventListener("dblclick", (event) => {
+          event.stopPropagation();
+        });
+    }, []);
+
+    const oneBgExpired = localStorage.getItem(feature.ONE_BG.name) === "true";
     return (
       <>
-        <div className="form__body">
+        <div id="form" className="form__body">
           <p className="form__title">Set Time</p>
           <form
             className="form"
@@ -55,7 +71,7 @@ const TimerForm = forwardRef<any, Props>(
               <select
                 value={unit}
                 onChange={handleUnitChange}
-                className="form__label"
+                className="form__select"
               >
                 {units?.map((unit, index) => (
                   <option key={index} value={unit}>
@@ -65,7 +81,6 @@ const TimerForm = forwardRef<any, Props>(
               </select>
             </div>
 
-            <span className="badge">NEW</span>
             <div
               title="Use a single background for your timer (black for dark mode and white for light mode)."
               className="form__group"
@@ -80,6 +95,7 @@ const TimerForm = forwardRef<any, Props>(
                 isChecked={oneBg}
                 onChange={toggleOneBg}
               />
+              {!oneBgExpired && <span className="badge">NEW</span>}
             </div>
             <button className="form__submit" type="submit" onClick={onSubmit}>
               Set
