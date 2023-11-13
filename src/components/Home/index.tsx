@@ -89,7 +89,7 @@ const Home: FC = () => {
     setOneBg((prev) => !prev);
 
     if (!Boolean(localStorage.getItem(feature.ONE_BG.name))) {
-      localStorage.setItem(feature.ONE_BG.name, "true");
+      localStorage.setItem(feature.ONE_BG.name, feature.ONE_BG.options.TRUE);
     }
   };
 
@@ -276,10 +276,10 @@ const Home: FC = () => {
   useEffect(() => {
     if (oneBg) {
       setClassList(colorThemes.DEFAULT);
-      localStorage.setItem(feature.ONE_BG.enable, "true");
+      localStorage.setItem(feature.ONE_BG.enable, feature.ONE_BG.options.TRUE);
       return;
     } else {
-      localStorage.setItem(feature.ONE_BG.enable, "false");
+      localStorage.setItem(feature.ONE_BG.enable, feature.ONE_BG.options.FALSE);
     }
     if (!showClock) {
       if (timeUp) {
@@ -348,7 +348,7 @@ const Home: FC = () => {
       date.getFullYear() !== feature.ONE_BG.expiryYear &&
       localStorage.getItem(feature.ONE_BG.name) === "true"
     ) {
-      localStorage.setItem(feature.ONE_BG.name, "true");
+      localStorage.setItem(feature.ONE_BG.name, feature.ONE_BG.options.TRUE);
     }
   }, []);
 
