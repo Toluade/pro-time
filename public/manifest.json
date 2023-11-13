@@ -3,7 +3,7 @@
   "short_name": "ProTime",
   "dir": "ltr",
   "lang": "en-US",
-  "orientation": "any",
+  "orientation": "portrait",
   "start_url": "/",
   "background_color": "#000000",
   "theme_color": "#eeeeee",
