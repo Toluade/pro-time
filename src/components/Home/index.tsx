@@ -354,12 +354,14 @@ const Home: FC = () => {
 
   useEffect(() => {
     const iconContainer = document.getElementById("iconContainer");
+    let timeout;
     if (iconContainer && isFullScreen && !mouseOver) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         iconContainer.style.transition = "1s";
         iconContainer.style.opacity = "0";
       }, 3800);
     } else if (iconContainer) {
+      clearTimeout(timeout);
       iconContainer.style.transition = "0.3s";
       iconContainer.style.opacity = "1";
     }
