@@ -14,10 +14,13 @@ const TimerForm = forwardRef<any, Props>(
   ({ setContDownTime, toggleOneBg, oneBg }, ref) => {
     const [inputValue, setInputValue] = useState<any>("");
 
-    const units = ["Seconds", "Minutes"];
-    const [unit, setUnit] = useState(units[0]);
+    const units = Object.values(feature.UNIT.options);
+    const [unit, setUnit] = useState(
+      localStorage.getItem(feature.UNIT.name) ?? units[0]
+    );
 
     const handleUnitChange = (e: FormEvent<HTMLSelectElement>) => {
+      localStorage.setItem(feature.UNIT.name, e.currentTarget.value);
       setUnit(e.currentTarget.value);
     };
 
