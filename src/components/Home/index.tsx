@@ -282,11 +282,11 @@ const Home: FC = () => {
       localStorage.setItem(feature.ONE_BG.enable, feature.ONE_BG.options.FALSE);
     }
     if (!showClock) {
-      if (timeUp) {
+      if (timeUp || countDown < countDownMin * 0.05) {
         setClassList(`${colorThemes.RED} ${colorThemes.BLINK}`);
-      } else if (countDown < 10000) {
-        setClassList(`${colorThemes.ORANGE} ${colorThemes.BLINK}`);
-      } else if (countDown < 60000) {
+      } else if (countDown < countDownMin * 0.2) {
+        setClassList(`${colorThemes.RED} ${colorThemes.BLINK}`);
+      } else if (countDown < countDownMin * 0.5) {
         setClassList(colorThemes.ORANGE);
       } else {
         setClassList(colorThemes.GREEN);
@@ -295,10 +295,32 @@ const Home: FC = () => {
       setClassList(colorThemes.DEFAULT);
     }
   }, [countDown, timeUp, showClock, oneBg]);
+  // useEffect(() => {
+  //   if (oneBg) {
+  //     setClassList(colorThemes.DEFAULT);
+  //     localStorage.setItem(feature.ONE_BG.enable, feature.ONE_BG.options.TRUE);
+  //     return;
+  //   } else {
+  //     localStorage.setItem(feature.ONE_BG.enable, feature.ONE_BG.options.FALSE);
+  //   }
+  //   if (!showClock) {
+  //     if (timeUp) {
+  //       setClassList(`${colorThemes.RED} ${colorThemes.BLINK}`);
+  //     } else if (countDown < 10000) {
+  //       setClassList(`${colorThemes.ORANGE} ${colorThemes.BLINK}`);
+  //     } else if (countDown < 60000) {
+  //       setClassList(colorThemes.ORANGE);
+  //     } else {
+  //       setClassList(colorThemes.GREEN);
+  //     }
+  //   } else {
+  //     setClassList(colorThemes.DEFAULT);
+  //   }
+  // }, [countDown, timeUp, showClock, oneBg]);
 
   useEffect(() => {
     window.addEventListener("keydown", (evt) => {
-      if (evt.code === "Space") {
+      if (evt.code === "Space" || evt.code === "Enter") {
         if (timerStarted) {
           pauseTimer();
         } else {
@@ -309,7 +331,7 @@ const Home: FC = () => {
 
     return () => {
       window.removeEventListener("keydown", (evt) => {
-        if (evt.code === "Space") {
+        if (evt.code === "Space" || evt.code === "Enter") {
           if (timerStarted) {
             pauseTimer();
           } else {
@@ -354,18 +376,53 @@ const Home: FC = () => {
 
   useEffect(() => {
     const iconContainer = document.getElementById("iconContainer");
-    let timeout;
-    if (iconContainer && isFullScreen && !mouseOver) {
-      timeout = setTimeout(() => {
-        iconContainer.style.transition = "1s";
+    // let timeout;
+    // if (iconContainer && isFullScreen && !mouseOver) {
+    //   timeout = setTimeout(() => {
+    //     iconContainer.style.transition = "1s";
+    //     iconContainer.style.opacity = "0";
+    //   }, 3800);
+    // } else if (iconContainer) {
+    //   clearTimeout(timeout);
+    //   iconContainer.style.transition = "0.3s";
+    //   iconContainer.style.opacity = "1";
+    // }
+
+    window.addEventListener("mousemove", (event) => {
+      const mouseY = event.clientY;
+      if (iconContainer && !isFullScreen) {
+        iconContainer.style.opacity = "1";
+        return;
+      }
+
+      if (
+        iconContainer &&
+        mouseY >= iconContainer?.getBoundingClientRect()?.y - 350
+      ) {
+        iconContainer.style.opacity = "1";
+      } else if (iconContainer && isFullScreen) {
         iconContainer.style.opacity = "0";
-      }, 3800);
-    } else if (iconContainer) {
-      clearTimeout(timeout);
-      iconContainer.style.transition = "0.3s";
-      iconContainer.style.opacity = "1";
-    }
-  }, [isFullScreen, mouseOver]);
+      }
+    });
+
+    return () =>
+      window.removeEventListener("mousemove", (event) => {
+        const mouseY = event.clientY;
+        if (iconContainer && !isFullScreen) {
+          iconContainer.style.opacity = "1";
+          return;
+        }
+
+        if (
+          iconContainer &&
+          mouseY >= iconContainer?.getBoundingClientRect()?.y
+        ) {
+          iconContainer.style.opacity = "1";
+        } else if (iconContainer && isFullScreen) {
+          iconContainer.style.opacity = "0";
+        }
+      });
+  }, [isFullScreen]);
 
   return (
     <Provider value={{ displayModes, displayPreference, setDisplayPreference }}>
