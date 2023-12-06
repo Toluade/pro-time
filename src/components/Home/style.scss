@@ -124,6 +124,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    transition: 1s;
 
     @media screen and (max-width: 640px) {
       align-items: flex-start;
@@ -162,17 +163,19 @@
     }
 
     .icon {
-      font-size: 45px;
+      font-size: min(5vw + 90%, 40px);
       color: var(--shade5);
       background: var(--shade9);
       padding: 10px;
       border-radius: 50%;
       cursor: pointer;
-      transition: 0.4s;
+      transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 
       &:hover {
         background: var(--shade5);
         color: var(--shade1);
+        cursor: none;
+        transform: scale(1.05);
       }
     }
 
