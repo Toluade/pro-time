@@ -93,7 +93,7 @@ const TimerForm = forwardRef<any, Props>(
               </label>
               <Switch
                 size="md"
-                colorScheme="whatsapp"
+                colorScheme={"purple"}
                 style={{ outline: "none" }}
                 isChecked={oneBg}
                 onChange={toggleOneBg}

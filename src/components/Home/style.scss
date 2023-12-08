@@ -1,3 +1,5 @@
+$outline: #6d00c6;
+
 .dark-theme {
   --shade1: #000000;
   --shade2: #dc0000;
@@ -90,8 +92,7 @@
 
 .container {
   width: 100vw;
-  height: 100dvh;
-  height: 100vh;
+  height: 100svh;
 
   padding: 20px;
 
@@ -169,13 +170,14 @@
       padding: 10px;
       border-radius: 50%;
       cursor: pointer;
-      transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 
       &:hover {
         background: var(--shade5);
         color: var(--shade1);
         cursor: none;
-        transform: scale(1.05);
+        // transform: scale(1.05);
+        outline: 5px solid $outline;
       }
     }
     .flex-icon {
@@ -191,12 +193,13 @@
       padding: 10px;
       border-radius: 25px;
       cursor: pointer;
-      transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 
       &:hover {
         background: var(--shade5);
         color: var(--shade1);
         cursor: none;
+        outline: 5px solid $outline;
         // transform: scale(1.05);
       }
 
