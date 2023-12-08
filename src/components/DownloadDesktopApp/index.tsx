@@ -17,7 +17,7 @@ const DownloadDesktopApp = () => {
           className="link"
           target="_blank"
           rel="noopener"
-          href="https://drive.google.com/file/d/1zmli1eVoiRGU2RHPKfYDbtrwQYSgmXYf/view?usp=sharing"
+          href="https://drive.google.com/file/d/1zmli1eVoiRGU2RHPKfYDbtrwQYSgmXYf/view?usp=drive_link"
         >
           ProTime for Windows
         </a>

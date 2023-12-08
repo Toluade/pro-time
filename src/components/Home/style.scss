@@ -138,7 +138,7 @@ $outline: #6d00c6;
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
@@ -152,7 +152,7 @@ $outline: #6d00c6;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
 
       @media screen and (max-width: 640px) {
         // flex-direction: column;
@@ -171,13 +171,14 @@ $outline: #6d00c6;
       border-radius: 50%;
       cursor: pointer;
       transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+      outline-offset: 3px;
 
       &:hover {
         background: var(--shade5);
         color: var(--shade1);
         cursor: none;
         // transform: scale(1.05);
-        outline: 5px solid $outline;
+        outline: 3px solid var(--shade5);
       }
     }
     .flex-icon {
@@ -194,12 +195,13 @@ $outline: #6d00c6;
       border-radius: 25px;
       cursor: pointer;
       transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+      outline-offset: 3px;
 
       &:hover {
         background: var(--shade5);
         color: var(--shade1);
         cursor: none;
-        outline: 5px solid $outline;
+        outline: 3px solid var(--shade5);
         // transform: scale(1.05);
       }
 
