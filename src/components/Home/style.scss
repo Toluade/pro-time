@@ -178,6 +178,36 @@
         transform: scale(1.05);
       }
     }
+    .flex-icon {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      // font-size: 1vw;
+      outline: none;
+      border: none;
+      font-size: min(1vw + 90%, 11px);
+      color: var(--shade5);
+      background: var(--shade9);
+      padding: 10px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+      &:hover {
+        background: var(--shade5);
+        color: var(--shade1);
+        cursor: none;
+        // transform: scale(1.05);
+      }
+
+      .iconn {
+        font-size: min(4vw, 20px);
+      }
+
+      @media (width < 641px) {
+        display: none;
+      }
+    }
 
     .fullscreen {
       transform: rotate(-45deg);

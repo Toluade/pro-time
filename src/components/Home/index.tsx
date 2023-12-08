@@ -16,6 +16,7 @@ import {
   MdFullscreenExit,
   MdVolumeOff,
   MdVolumeUp,
+  MdOutlineFileDownload,
 } from "react-icons/md";
 import {
   Popover,
@@ -31,6 +32,7 @@ import Timer from "../Timer";
 import alarm from "../../assets/audio/alarm.mp3";
 import alarm2 from "../../assets/audio/alarm.ogg";
 import { feature } from "../../utils/storedItems";
+import DownloadDesktopApp from "../DownloadDesktopApp";
 
 export const SettingsContext = createContext<SettingsProviderType>({});
 
@@ -166,6 +168,11 @@ const Home: FC = () => {
     isOpen: isOpenP,
     onOpen: onOpenP,
     onClose: onCloseP,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenD,
+    onOpen: onOpenD,
+    onClose: onCloseD,
   } = useDisclosure();
 
   function enterFullScreen(element: HTMLElement) {
@@ -500,6 +507,29 @@ const Home: FC = () => {
             </Popover>
           </div>
           <div className="right">
+            <Popover
+              isOpen={isOpenD}
+              initialFocusRef={inputRef}
+              onOpen={onOpenD}
+              onClose={onCloseD}
+              placement="top"
+              closeOnBlur={true}
+              // trigger="hover"
+            >
+              <PopoverTrigger>
+                <button className="flex-icon">
+                  <MdOutlineFileDownload className="iconn" />{" "}
+                  <span>Desktop App</span>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="popover-content" padding={0}>
+                <PopoverCloseButton className="popover-close-button" />
+                <PopoverBody padding={0}>
+                  <DownloadDesktopApp />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+
             {muted ? (
               <MdVolumeOff
                 title="Toggle audio on and off (currently off)"

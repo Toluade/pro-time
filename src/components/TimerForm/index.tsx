@@ -54,7 +54,7 @@ const TimerForm = forwardRef<any, Props>(
     return (
       <>
         <div id="form" className="form__body">
-          <p className="form__title">Set Time</p>
+          <h2 className="form__title">Set Time</h2>
           <form
             className="form"
             action=""

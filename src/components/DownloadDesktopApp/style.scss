@@ -1,0 +1,37 @@
+.download-popover {
+  background: var(--shade5);
+  color: var(--shade1);
+  padding-block: 1rem;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding-inline: 1rem;
+}
+
+.link-wrapper {
+  //   padding-block: 2rem;
+  padding-inline: 0;
+
+  .link {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+
+    &:hover {
+      background: var(--shade1);
+      color: var(--shade5);
+    }
+  }
+}
+
+.note {
+  font-style: italic;
+  font-weight: 300;
+  font-size: 10px;
+  padding-inline: 1rem;
+  margin-top: 1rem;
+  color: var(--shade6);
+}
